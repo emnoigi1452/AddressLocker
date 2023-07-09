@@ -1,0 +1,55 @@
+# Basic settings for the plugin
+filter:
+  # Filter non-vietnamese addresses
+  check-vn: true
+  # Filter addresses marked as hosted by a service
+  check-hosting: false
+  # Filter addresses marked as potential proxies
+  check-proxy: false
+  # Listing of banned proxy providers
+  banned-proxies:
+  - 'Cloudflare, Inc.'
+  # Filter addresses marked as using mobile data
+  check-mobile: false
+
+# Basic settings for handling protocols
+handle:
+  # Should all the protocols for handling IP addresses be performed asynchronously?
+  # This does not include the HTTP request, as that is executed asynchronously by default.
+  async: true
+  # How long in ticks should each request be sent (20 ticks = 1 second)
+  request-interval: 20
+  # How long in ticks should we wait before clearing the player's IP after they log out? (20 ticks = 1 second)
+  cleanup-delay: 1200
+  # Should we kick the player if the system encounters an error while verifying their IP?
+  kick-error-player: false
+  # Settings for a throttle system
+  block:
+    # Should we block the player from joining?
+    enabled: true
+    # The block mode the plugin will be using
+    # - LOBBY: Sends the player to the main lobby server
+    # - NETWORK: Sends the player out of the network
+    kick-mode: LOBBY
+    # The name of the lobby server, as defined in the BungeeCord config.yml
+    lobby-server: 'Lobby'
+    # The kick message
+    message: '&fKết nối mạng của bạn hơi lạ... Không cho chơi &eBedwars &fđâu &d:3'
+  # Settings for a warning system:
+  warning:
+    # Should we warn online staff about the IP address
+    enabled: false
+    # The warning message: {region} - The region of the IP address, {name} - The player's name
+    message: '&fPhát hiện IP lạ! Người chơi &a{name} &fđăng nhập từ &e{region}'
+    # Status message for when an error occurs
+    message-error: '&fGặp lỗi khi cố nhận dạng IP của &a{name}&f. Thông tin: &e{error}'
+    # The listing of staff members that should receive the warning
+    staff:
+      - DucTrader
+      - Crush_Seul
+  # Settings for a Discord warning system
+  discord:
+    # Should this system be enabled?
+    enabled: false
+    # The webhook that we should use for noting the addresses
+    webhook: ''
