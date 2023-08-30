@@ -1,0 +1,13 @@
+name: AddressLocker
+version: 1.1
+main: me.stella.Plugin.LockerPlugin
+api-version: 1.17
+authors:
+  - Crush_Seul
+  - StellarSeal
+description: An IP address handler made for LuckyVN to specific block IP addresses
+commands:
+  request:
+    usage: /<command> [player]
+    default: false
+    description: Adds player to IP check list
