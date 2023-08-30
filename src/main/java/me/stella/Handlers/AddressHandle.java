@@ -1,5 +1,6 @@
 package me.stella.Handlers;
 
+import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -65,8 +66,7 @@ public class AddressHandle {
 							return;
 						}
 						// check for when the ip is sus
-						if (AddressHandle.badIP(String.valueOf(response.get("countryCode")).trim(),
-								(boolean) response.get("hosting"), (boolean) response.get("proxy"), String.valueOf(response.get("isp")), String.valueOf(response.get("as")), (boolean) response.get("mobile"))) {
+						if (AddressHandle.badIP(AddressHandle.serializeNetworkProperty(response))) {
 							if (handleConfig.getConfig().getBoolean("handle.block.enabled")) {
 								BungeeKickMode kickMode;
 								try {
@@ -93,8 +93,25 @@ public class AddressHandle {
 			}
 		}).runTaskAsynchronously(LockerPlugin.main);
 	}
+
+	protected static Object[] serializeNetworkProperty(JSONObject jsonObject) {
+		return (new Object[] {
+				jsonObject.get("countryCode"),
+				jsonObject.get("hosting"),
+				jsonObject.get("proxy"),
+				jsonObject.get("isp"),
+				jsonObject.get("as"),
+				jsonObject.get("mobile")
+		});
+	}
 	
-	public static boolean badIP(String country, boolean hosting, boolean proxy, String provider, String as, boolean mobile) {
+	public static boolean badIP(Object[] packet) {
+		String country = String.valueOf(packet[0]).trim();
+		boolean hosting = ((boolean) packet[1]);
+		boolean proxy = ((boolean) packet[2]);
+		String provider = String.valueOf(packet[3]);
+		String as = String.valueOf(packet[4]);
+		boolean mobile = ((boolean) packet[5]);
 		boolean flagStatus = false;
 		if(checkRegion)
 			flagStatus = flagStatus || (!(country.equals("VN")));
@@ -123,5 +140,4 @@ public class AddressHandle {
 			return true;
 		return AddressHandle.bannedProviders.contains(provider);
 	}
-	
 }
