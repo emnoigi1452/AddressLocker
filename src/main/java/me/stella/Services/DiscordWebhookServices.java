@@ -70,7 +70,7 @@ public class DiscordWebhookServices {
 		JSONObject payloadBuilder = new JSONObject();
 		payloadBuilder.put("content", "");
 		payloadBuilder.put("tts", false);
-		payloadBuilder.put("embeds", buildInfoBody(player, regionCode, String.valueOf(responsePayload.get("isp")), 
+		payloadBuilder.put("embeds", buildInfoBody(player, regionCode, String.valueOf(responsePayload.get("isp")), String.valueOf(responsePayload.get("as")),
 				(boolean)responsePayload.get("hosting"), (boolean)responsePayload.get("proxy"), (boolean)responsePayload.get("mobile")));
 		return payloadBuilder;
 	}
@@ -85,7 +85,7 @@ public class DiscordWebhookServices {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JSONArray buildInfoBody(String player, String region, String isp, boolean hosting, boolean proxy, boolean mobile) {
+	private JSONArray buildInfoBody(String player, String region, String isp, String as, boolean hosting, boolean proxy, boolean mobile) {
 		JSONArray embeds = new JSONArray();
 		JSONObject embedHeader = new JSONObject();
 		embedHeader.put("type", "rich");
@@ -96,6 +96,7 @@ public class DiscordWebhookServices {
 		fieldArray.add(buildField("Đăng nhập lúc", buildCurrentTime(), true));
 		fieldArray.add(buildField("Địa điểm", region, true));
 		fieldArray.add(buildField("Tên nhà mạng", isp, false));
+		fieldArray.add(buildField("AS", as, false));
 		fieldArray.add(buildField("Hosted IP", hosting, true));
 		fieldArray.add(buildField("Proxy/VPN", proxy, true));
 		fieldArray.add(buildField("Mobile", mobile, true));

@@ -39,8 +39,11 @@ public class LockerPlugin extends JavaPlugin {
 		AddressHandle.checkHost = this.config.getConfig().getBoolean("filter.check-hosting");
 		AddressHandle.checkProxy = this.config.getConfig().getBoolean("filter.check-proxy");
 		AddressHandle.checkMobile = this.config.getConfig().getBoolean("filter.check-mobile");
+		AddressHandle.checkAS = this.config.getConfig().getBoolean("filter.check-as");
 		for(String provider: this.config.getConfig().getStringList("filter.banned-proxies"))
 			AddressHandle.bannedProviders.add(provider);
+		for(String wildcard: this.config.getConfig().getStringList("filter.wildcard"))
+			AddressHandle.queries.add(wildcard);
 		console.log(Level.INFO, "Finished setting up basic filters... Performing module setups...");
 		this.requestService = new APIRequestService(main, this.config.getConfig().getLong("handle.request-internal"));
 		console.log(Level.INFO, " - API Request Service has been loaded!");

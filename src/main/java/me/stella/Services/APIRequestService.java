@@ -20,7 +20,7 @@ import me.stella.Plugin.LockerPlugin;
 
 public class APIRequestService {
 	
-	public static String API = "http://ip-api.com/json/{address}?fields=17023515";
+	public static String API = "http://ip-api.com/json/{address}?fields=17025551";
 	
 	private int requestCounter = 0;
 	

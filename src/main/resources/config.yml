@@ -11,6 +11,11 @@ filter:
   - 'Cloudflare, Inc.'
   # Filter addresses marked as using mobile data
   check-mobile: false
+  # Filter out specific service providers
+  check-as: false
+  # List of banned providers wildcard
+  wildcard:
+    - 'VIETPN'
 
 # Basic settings for handling protocols
 handle:
