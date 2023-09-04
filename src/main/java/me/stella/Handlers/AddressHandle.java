@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
+import me.stella.Services.SoftEtherService;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONObject;
@@ -43,7 +44,7 @@ public class AddressHandle {
 					requestObject.thenAcceptAsync(object -> {
 						JSONObject response = (JSONObject) object;
 						LockerPlugin.console.log(Level.INFO, ChatColor.GREEN + player + " - " + response.toJSONString());
-						if (String.valueOf(response.get("status")).equals("fail")) {
+						if (String.valueOf(response.get("status")).equalsIgnoreCase("fail")) {
 							if (handleConfig.getConfig().getBoolean("handle.discord.enabled")) {
 								JSONObject errorPayload = webhookService.buildErrorPayload(player, String.valueOf(response.get("message")));
 								webhookService.postToWebhook(errorPayload);
@@ -55,7 +56,7 @@ public class AddressHandle {
 									bungeeService.sendMessage(staffMember, LockerPlugin.color(errorTrace));
 							}
 							if (handleConfig.getConfig().getBoolean("handle.kick-error-player")) {
-								BungeeKickMode kickMode = null;
+								BungeeKickMode kickMode;
 								try {
 									kickMode = BungeeKickMode.valueOf("handle.block.kick-mode");
 								} catch (Exception err) {

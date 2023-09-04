@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import me.stella.Services.SoftEtherService;
 import org.bukkit.Bukkit;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -44,6 +45,11 @@ public class LockerPlugin extends JavaPlugin {
 			AddressHandle.bannedProviders.add(provider);
 		for(String wildcard: this.config.getConfig().getStringList("filter.wildcard"))
 			AddressHandle.queries.add(wildcard);
+		/*
+		long softEtherDelay = this.config.getConfig().getLong("blacklist.softether.update-interval", 3600L) * 20L;
+		boolean permanentCache = this.config.getConfig().getBoolean("blacklist.softether.permanent-caching", false);
+		SoftEtherService.bootMapTask(permanentCache, softEtherDelay);
+		 */
 		console.log(Level.INFO, "Finished setting up basic filters... Performing module setups...");
 		this.requestService = new APIRequestService(main, this.config.getConfig().getLong("handle.request-internal"));
 		console.log(Level.INFO, " - API Request Service has been loaded!");
@@ -53,7 +59,6 @@ public class LockerPlugin extends JavaPlugin {
 		this.discordService = new DiscordWebhookServices(main, 
 				this.config.getConfig().getBoolean("handle.async"), this.config.getConfig().getString("handle.discord.webhook"));
 		console.log(Level.INFO, " - Discord Webhook Service has been loaded!");
-		LoginHandle.ipMap = new HashMap<>();
 		Bukkit.getServer().getPluginManager().registerEvents(
 				new LoginHandle(main, this.config.getConfig().getLong("handle.cleanup-delay")), main);
 		console.log(Level.INFO, " - All logging handlers are loaded!");

@@ -20,7 +20,7 @@ public class RequestCommand implements CommandExecutor {
 					target = args[0];
 				} catch(Throwable t) { sender.sendMessage("/request <player>"); return false; }
 				String ip = LoginHandle.ipMap.getOrDefault(target, "");
-				if(ip.equals(""))
+				if(ip.isEmpty() || ip.length() < 4)
 					sender.sendMessage(LockerPlugin.color("&cPlayer does not exist! Please check again..."));
 				else LockerPlugin.main.getRequestService().addToIPCheck(target, ip);
 			}

@@ -17,6 +17,16 @@ filter:
   wildcard:
     - 'VIETPN'
 
+# Settings for public proxy-blocking
+blacklist:
+  # Program: SoftEther VPN Gate
+  softether:
+    # The interval between each update of the server list (seconds)
+    update-interval: 3600
+    # Should we save the IPs permanently, or remove them upon the next refresh?
+    permanent-caching: false
+
+
 # Basic settings for handling protocols
 handle:
   # Should all the protocols for handling IP addresses be performed asynchronously?
