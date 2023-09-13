@@ -35,7 +35,7 @@ public class LockerPlugin extends JavaPlugin {
 		main = this;
 		saveDefaultConfig();
 		this.config = new LockerConfig(new File(main.getDataFolder(), "config.yml"));
-		console.log(Level.INFO, "Loaded configuration... Attempting to set up filters...");
+		console.log(Level.INFO, "Configuration loaded! Attemptng to load checks basic checks...");
 		AddressHandle.checkRegion = this.config.getConfig().getBoolean("filter.check-vn");
 		AddressHandle.checkHost = this.config.getConfig().getBoolean("filter.check-hosting");
 		AddressHandle.checkProxy = this.config.getConfig().getBoolean("filter.check-proxy");
@@ -45,16 +45,19 @@ public class LockerPlugin extends JavaPlugin {
 			AddressHandle.bannedProviders.add(provider);
 		for(String wildcard: this.config.getConfig().getStringList("filter.wildcard"))
 			AddressHandle.queries.add(wildcard);
-		/*
-		long softEtherDelay = this.config.getConfig().getLong("blacklist.softether.update-interval", 3600L) * 20L;
-		boolean permanentCache = this.config.getConfig().getBoolean("blacklist.softether.permanent-caching", false);
-		SoftEtherService.bootMapTask(permanentCache, softEtherDelay);
-		 */
-		console.log(Level.INFO, "Finished setting up basic filters... Performing module setups...");
+		boolean enabled = this.config.getConfig().getBoolean("blacklist.softether.enabled", false);
+		if(enabled) {
+			SoftEtherService.enabled = true;
+			long softEtherDelay = this.config.getConfig().getLong("blacklist.softether.update-interval", 3600L) * 20L;
+			boolean permanentCache = this.config.getConfig().getBoolean("blacklist.softether.permanent-caching", false);
+			SoftEtherService.bootMapTask(permanentCache, softEtherDelay);
+			console.log(Level.INFO, "- SoftEther IP caching is enabled!");
+		}
+		console.log(Level.INFO, "Enabling other modules...");
 		this.requestService = new APIRequestService(main, this.config.getConfig().getLong("handle.request-internal"));
 		console.log(Level.INFO, " - API Request Service has been loaded!");
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-		this.bungeeService = new BungeeCordServices(main, this.config.getConfig().getBoolean("handle.async"));
+		this.bungeeService = new BungeeCordServices(main);
 		console.log(Level.INFO, " - BungeeCord Message Service has been loaded!");
 		this.discordService = new DiscordWebhookServices(main, 
 				this.config.getConfig().getBoolean("handle.async"), this.config.getConfig().getString("handle.discord.webhook"));

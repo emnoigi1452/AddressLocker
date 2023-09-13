@@ -21,6 +21,8 @@ filter:
 blacklist:
   # Program: SoftEther VPN Gate
   softether:
+    # Should this module be enabled?
+    enabled: true
     # The interval between each update of the server list (seconds)
     update-interval: 3600
     # Should we save the IPs permanently, or remove them upon the next refresh?

@@ -59,9 +59,9 @@ public class DiscordWebhookServices {
 			}
 		});
 		if(isAsync())
-			runnable.runTask(plugin);
-		else
 			runnable.runTaskAsynchronously(plugin);
+		else
+			runnable.runTask(plugin);
 	}
 	
 	@SuppressWarnings("unchecked")

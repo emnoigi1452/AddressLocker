@@ -12,12 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Deprecated
 public class SoftEtherService {
 
     public static final Set<String> cache = new HashSet<>();
+    public static boolean enabled = false;
 
-    @Deprecated
     public static void bootMapTask(boolean permanent, long delay) {
         (new BukkitRunnable() {
             @Override
@@ -35,12 +34,7 @@ public class SoftEtherService {
                             proxies.add(packet);
                     }
                     reader.close(); connection.disconnect();
-                    proxies.forEach(e -> {
-                        String[] content = e.split(",");
-                        if(content[6].equalsIgnoreCase("VN")) {
-                            cache.add(content[1]);
-                        }
-                    });
+                    proxies.forEach(e -> cache.add(e.split(",")[1]));
                 } catch(Exception err) { err.printStackTrace(); }
             }
         }).runTaskTimerAsynchronously(LockerPlugin.main, 0L, delay);

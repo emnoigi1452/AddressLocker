@@ -11,15 +11,9 @@ import me.stella.Plugin.LockerPlugin;
 public class BungeeCordServices {
 	
 	private LockerPlugin plugin;
-	private boolean async;
 	
-	public BungeeCordServices(LockerPlugin main, boolean async) {
+	public BungeeCordServices(LockerPlugin main) {
 		this.plugin = main;
-		this.async = async;
-	}
-	
-	public boolean isAsync() {
-		return this.async;
 	}
 	
 	public void kickPlayer(final String name, final BungeeKickMode mode) {
@@ -27,10 +21,10 @@ public class BungeeCordServices {
 				LockerPlugin.main.getLockerSettings().getConfig().getString("handle.block.message"));
 		switch(mode) {
 			case LOBBY:
-				messageBungeeCord(isAsync(), mode.getExecuteDelay(), new String[] { "ConnectOther", name, mode.getBungeeNode() });
+				messageBungeeCord(mode.getExecuteDelay(), new String[] { "ConnectOther", name, mode.getBungeeNode() });
 				sendMessage(name, coloredMessage); break;
 			case NETWORK:
-				messageBungeeCord(isAsync(), mode.getExecuteDelay(), new String[] { "KickPlayer", name, coloredMessage });
+				messageBungeeCord(mode.getExecuteDelay(), new String[] { "KickPlayer", name, coloredMessage });
 				break;
 			default:
 				break;
@@ -38,11 +32,11 @@ public class BungeeCordServices {
 	}
 	
 	public void sendMessage(final String target, String message) {
-		messageBungeeCord(isAsync(), 0L, new String[] { "Message", target, message });
+		messageBungeeCord(0L, new String[] { "Message", target, message });
 	}
 	
-	private void messageBungeeCord(boolean async, long delay, final String... params) {
-		BukkitRunnable runnable = (new BukkitRunnable() {
+	private void messageBungeeCord(long delay, final String... params) {
+		(new BukkitRunnable() {
 			@Override
 			public void run() {
 				ByteArrayDataOutput output = ByteStreams.newDataOutput();
@@ -50,14 +44,10 @@ public class BungeeCordServices {
 					output.writeUTF(param);
 				Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", output.toByteArray());
 			}
-		});
-		if(async)
-			runnable.runTaskLaterAsynchronously(plugin, delay);
-		else
-			runnable.runTaskLater(plugin, delay);
+		}).runTask(LockerPlugin.main);
 	}
 	
-	public static enum BungeeKickMode {
+	public enum BungeeKickMode {
 		
 		LOBBY(0, LockerPlugin.main.getLockerSettings().getConfig().getString("handle.block.lobby-server")),
 		NETWORK(20, null);

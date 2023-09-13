@@ -1,5 +1,5 @@
 name: AddressLocker
-version: 1.1.3
+version: 1.1.4
 main: me.stella.Plugin.LockerPlugin
 api-version: 1.17
 authors:
