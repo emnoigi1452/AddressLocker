@@ -3,6 +3,7 @@ package me.stella.Handlers;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -66,8 +67,10 @@ public class AddressHandle {
 							}
 							return;
 						}
+						boolean isBad = AddressHandle.badIP(AddressHandle.serializeNetworkProperty(response));
+						boolean softEther = AddressHandle.checkSoftEtherCache(ip);
 						// check for when the ip is sus
-						if (AddressHandle.badIP(AddressHandle.serializeNetworkProperty(response)) || AddressHandle.checkSoftEtherCache(ip)) {
+						if (isBad || softEther) {
 							if (handleConfig.getConfig().getBoolean("handle.block.enabled")) {
 								BungeeKickMode kickMode;
 								try {
@@ -96,6 +99,7 @@ public class AddressHandle {
 	}
 
 	protected static boolean checkSoftEtherCache(String ip) {
+		//LockerPlugin.console.log(Level.INFO, ip + " - " + SoftEtherService.cache);
 		return SoftEtherService.enabled && SoftEtherService.cache.contains(ip);
 	}
 
@@ -127,7 +131,15 @@ public class AddressHandle {
 				flagStatus = flagStatus || (AddressHandle.isProviderBanned(provider));
 		}
 		if(!flagStatus && checkAS) {
-			boolean safe = AddressHandle.queries.stream().filter(card -> as.contains(card)).collect(Collectors.toSet()).size() > 0;
+			boolean safe = !AddressHandle.queries.stream().filter(card -> as.contains(card)).findFirst().isPresent();
+			/*
+			for(String wildcard: AddressHandle.queries) {
+				if(as.contains(wildcard)) {
+					safe = false;
+					break;
+				}
+			}
+			 */
 			flagStatus = flagStatus || !safe;
 		}
 		if((!flagStatus) && checkMobile)
